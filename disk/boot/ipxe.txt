@@ -1,0 +1,5 @@
+#!ipxe
+
+kernel /runtime
+initrd /initrd
+boot
