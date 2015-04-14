@@ -1,15 +1,13 @@
-Runtime.JS [![Build Status](https://travis-ci.org/runtimejs/runtime.svg?branch=master)](https://travis-ci.org/runtimejs/runtime)
+raspberrry2v8 [![Build Status](https://api.travis-ci.org/sloanyang/raspberrry2v8.svg?branch=master)](https://travis-ci.org/sloanyang/raspberrry2v8)
 ====
 
-__Runtime.JS__ is a kernel built on V8 JavaScript engine. It uses event-driven and non-blocking I/O model inspired by Node.js.
+__raspberry2v8__ is a kernel built on V8 JavaScript engine. It uses event-driven and non-blocking I/O model inspired by Node.js.
 
 The goal of this project is to design and implement a kernel that is optimized to run JavaScript applications. By providing environment for JavaScript code only, it is possible to rethink kernel design to improve security, reliability and performance of the system. 
 
 It's currently under development and does not include many essential features. If you want to contribute, your help is very welcome.
 
-You can use issues section to ask any questions or share your ideas https://github.com/runtimejs/runtime/issues
-
-Join IRC chatroom #runtimejs on freenode
+You can use issues section to ask any questions or share your ideas https://github.com/sloanyang/raspberry2v8/issues
 
 ![Console](https://raw.githubusercontent.com/runtimejs/runtimejs.github.io/master/img/runtimejs_3.png)
 
@@ -19,7 +17,7 @@ Technical details
 
 Kernel [architecture](https://github.com/runtimejs/runtime/wiki/Architecture)
 
-- supported x86_64, 64 bit only
+- supported raspberrypi board and arm based board (SUPPOSED). 
 - software isolated applications ([isolates](https://github.com/runtimejs/runtime/wiki/Isolate))
 - single address space, no hardware context switches
 - does not use cpu protection rings
@@ -58,17 +56,7 @@ Build
 
 *Warning: gcc 4.9.0 is not supported because of libc++ compile bug (use 4.9.1 or newer)*
 
-####Using Docker
-
-Easiest way to setup developer environment is to use Docker https://www.docker.io/
-
-    ./docker-prepare.sh
-
-To build
-
-    ./docker-build.sh
-
-####Without Docker
+####Building
 
 You need to install fasm, scons and GCC cross compiler targeting x86\_64-elf. http://wiki.osdev.org/GCC_Cross-Compiler
 
@@ -98,8 +86,7 @@ Documentation
 ----
 [Wiki pages](https://github.com/runtimejs/runtime/wiki)
 
-[Developer CLI](https://www.npmjs.com/package/runtime-cli)
 
 License
 ----
-Apache License, Version 2.0
+GNU GENERAL PUBLIC LICENSE, Version 2, June 1991
