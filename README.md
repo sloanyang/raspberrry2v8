@@ -5,21 +5,25 @@ __raspberrRy2v8__ is a kernel built on V8 JavaScript engine. It uses event-drive
 
 The goal of this project is to design and implement a kernel that is optimized to run JavaScript applications. By providing environment for JavaScript code only, it is possible to rethink kernel design to improve security, reliability and performance of the system. 
 
-It's currently under development and does not include many essential features. If you want to contribute, your help is very welcome.
+It target at small mobile devices, and provides best performance and power consumption balance.
 
 You can use issues section to ask any questions or share your ideas https://github.com/sloanyang/raspberrry2v8/issues
 
-![Console](https://raw.githubusercontent.com/sloanyang/sloanyang.github.io/master/raspberrrypi2v8_index/runtimejs_3.png)
-
+It's under heavy development. Please contact sloanyang@gmail.com for more info. 
 
 Technical details
 ----
+TARGET [design](https://github.com/sloanyang/raspberrry2v8/wiki) 
+- performance/energy efficiency.
+- secure
+- small
+- decentralized
 
 Kernel [architecture](https://github.com/sloanyang/raspberrry2v8/wiki/Architecture)
 
 - supported raspberrypi board and arm based board (SUPPOSED). 
 - software isolated applications ([isolates](https://github.com/sloanyang/raspberrry2v8/wiki/Isolate))
-- single address space, no hardware context switches
+- single address space, no hardware context switches. 
 - does not use cpu protection rings
 - non-blocking asynchronous [inter-isolate communication](https://github.com/sloanyang/raspberrry2v8/wiki/RPC) (IIC)
 - drivers and system services are implemented in JavaScript
