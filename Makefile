@@ -206,6 +206,7 @@ else
 		roottree := ..
         else
                 srctree := $(KBUILD_SRC)
+		roottree := $(CURDIR)
         endif
 endif
 objtree		:= .
@@ -214,7 +215,7 @@ obj		:= $(objtree)
 
 VPATH		:= $(srctree)$(if $(KBUILD_EXTMOD),:$(KBUILD_EXTMOD))
 
-export srctree objtree VPATH
+export roottree srctree objtree VPATH
 
 
 # SUBARCH tells the usermode build what the underlying arch is.  That is set

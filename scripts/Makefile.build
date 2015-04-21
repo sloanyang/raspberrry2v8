@@ -39,8 +39,7 @@ include scripts/Kbuild.include
 save-cflags := $(CFLAGS)
 
 # The filename Kbuild has precedence over Makefile
-kbuild-dir := $(if $(filter /%,$(src)),$(src),./$(src))
-$(call echo-cmd,kbuild-dir)
+kbuild-dir := $(if $(filter /%,$(src)),$(src), $(roottree)/$(src))
 kbuild-file := $(if $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Kbuild,$(kbuild-dir)/Makefile)
 include $(kbuild-file)
 
