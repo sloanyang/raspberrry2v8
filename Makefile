@@ -1,8 +1,8 @@
-VERSION = 3
-PATCHLEVEL = 18
-SUBLEVEL = 11
+VERSION = 0 
+PATCHLEVEL = 0
+SUBLEVEL = 1
 EXTRAVERSION =
-NAME = Diseased Newt
+NAME = 2v8
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"
@@ -254,35 +254,6 @@ CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
 SRCARCH 	:= $(ARCH)
-
-# Additional ARCH settings for x86
-ifeq ($(ARCH),i386)
-        SRCARCH := x86
-endif
-ifeq ($(ARCH),x86_64)
-        SRCARCH := x86
-endif
-
-# Additional ARCH settings for sparc
-ifeq ($(ARCH),sparc32)
-       SRCARCH := sparc
-endif
-ifeq ($(ARCH),sparc64)
-       SRCARCH := sparc
-endif
-
-# Additional ARCH settings for sh
-ifeq ($(ARCH),sh64)
-       SRCARCH := sh
-endif
-
-# Additional ARCH settings for tile
-ifeq ($(ARCH),tilepro)
-       SRCARCH := tile
-endif
-ifeq ($(ARCH),tilegx)
-       SRCARCH := tile
-endif
 
 # Where to locate arch specific headers
 hdr-arch  := $(SRCARCH)
