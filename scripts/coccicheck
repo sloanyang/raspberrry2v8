@@ -171,7 +171,7 @@ coccinelle () {
 }
 
 if [ "$COCCI" = "" ] ; then
-    for f in `find $srctree/scripts/coccinelle/ -name '*.cocci' -type f | sort`; do
+    for f in `find $roottree/scripts/coccinelle/ -name '*.cocci' -type f | sort`; do
 	coccinelle $f
     done
 else

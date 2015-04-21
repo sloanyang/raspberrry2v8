@@ -341,7 +341,7 @@ cmd_lz4 = (cat $(filter-out FORCE,$^) | \
 # U-Boot mkimage
 # ---------------------------------------------------------------------------
 
-MKIMAGE := $(srctree)/scripts/mkuboot.sh
+MKIMAGE := $(roottree)/scripts/mkuboot.sh
 
 # SRCARCH just happens to match slightly more than ARCH (on sparc), so reduces
 # the number of overrides in arch makefiles

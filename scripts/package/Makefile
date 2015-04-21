@@ -31,7 +31,7 @@ KERNELPATH := kernel-$(subst -,_,$(KERNELRELEASE))
 TAR_CONTENT := $(KBUILD_ALLDIRS) kernel.spec .config .scmversion Makefile \
                Kbuild Kconfig COPYING $(wildcard localversion*)
 TAR_CONTENT := $(addprefix $(KERNELPATH)/,$(TAR_CONTENT))
-MKSPEC     := $(srctree)/scripts/package/mkspec
+MKSPEC     := $(roottree)/scripts/package/mkspec
 
 # rpm-pkg
 # ---------------------------------------------------------------------------
@@ -45,11 +45,11 @@ rpm-pkg rpm: FORCE
 	$(MAKE) clean
 	ln -sf $(srctree) $(KERNELPATH)
 	$(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
-	$(CONFIG_SHELL) $(srctree)/scripts/setlocalversion --save-scmversion
+	$(CONFIG_SHELL) $(roottree)/scripts/setlocalversion --save-scmversion
 	tar -cz $(RCS_TAR_IGNORE) -f $(KERNELPATH).tar.gz $(TAR_CONTENT)
 	rm $(KERNELPATH)
 	rm -f $(objtree)/.scmversion
-	$(CONFIG_SHELL) $(srctree)/scripts/mkversion > $(objtree)/.tmp_version
+	$(CONFIG_SHELL) $(roottree)/scripts/mkversion > $(objtree)/.tmp_version
 	mv -f $(objtree)/.tmp_version $(objtree)/.version
 	$(RPM) $(RPMOPTS) --target $(UTS_MACHINE) -ta $(KERNELPATH).tar.gz
 	rm $(KERNELPATH).tar.gz kernel.spec
@@ -59,7 +59,7 @@ rpm-pkg rpm: FORCE
 binrpm-pkg: FORCE
 	$(MAKE) KBUILD_SRC=
 	$(CONFIG_SHELL) $(MKSPEC) prebuilt > $(objtree)/binkernel.spec
-	$(CONFIG_SHELL) $(srctree)/scripts/mkversion > $(objtree)/.tmp_version
+	$(CONFIG_SHELL) $(roottree)/scripts/mkversion > $(objtree)/.tmp_version
 	mv -f $(objtree)/.tmp_version $(objtree)/.version
 
 	$(RPM) $(RPMOPTS) --define "_builddir $(objtree)" --target \
@@ -84,7 +84,7 @@ quiet_cmd_builddeb = BUILDDEB
 	} && \
 	\
 	$$KBUILD_PKG_ROOTCMD $(CONFIG_SHELL) \
-		$(srctree)/scripts/package/builddeb
+		$(roottree)/scripts/package/builddeb
 
 deb-pkg: FORCE
 	$(MAKE) KBUILD_SRC=
@@ -97,7 +97,7 @@ clean-dirs += $(objtree)/debian/
 # ---------------------------------------------------------------------------
 tar%pkg: FORCE
 	$(MAKE) KBUILD_SRC=
-	$(CONFIG_SHELL) $(srctree)/scripts/package/buildtar $@
+	$(CONFIG_SHELL) $(roottree)/scripts/package/buildtar $@
 
 clean-dirs += $(objtree)/tar-install/
 

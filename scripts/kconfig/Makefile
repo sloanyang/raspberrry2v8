@@ -58,7 +58,7 @@ update-po-config: $(obj)/kxgettext $(obj)/gconf.glade.h
 	$(Q)xgettext --default-domain=linux                         \
 	    --add-comments --keyword=_ --keyword=N_                 \
 	    --from-code=UTF-8                                       \
-	    --files-from=$(srctree)/scripts/kconfig/POTFILES.in     \
+	    --files-from=$(roottree)/scripts/kconfig/POTFILES.in     \
 	    --directory=$(srctree) --directory=$(objtree)           \
 	    --output $(obj)/config.pot
 	$(Q)sed -i s/CHARSET/UTF-8/ $(obj)/config.pot
@@ -109,7 +109,7 @@ configfiles=$(wildcard $(srctree)/kernel/configs/$(1).config $(srctree)/arch/$(S
 define mergeconfig
 $(if $(wildcard $(objtree)/.config),, $(error You need an existing .config for this target))
 $(if $(call configfiles,$(1)),, $(error No configuration exists for this target on this architecture))
-$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh -m -O $(objtree) $(objtree)/.config $(call configfiles,$(1))
+$(Q)$(CONFIG_SHELL) $(roottree)/scripts/kconfig/merge_config.sh -m -O $(objtree) $(objtree)/.config $(call configfiles,$(1))
 $(Q)yes "" | $(MAKE) -f $(srctree)/Makefile oldconfig
 endef
 

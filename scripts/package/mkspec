@@ -29,7 +29,7 @@ echo "Summary: The Linux Kernel"
 echo "Version: $__KERNELRELEASE"
 # we need to determine the NEXT version number so that uname and
 # rpm -q will agree
-echo "Release: `. $srctree/scripts/mkversion`"
+echo "Release: `. $roottree/scripts/mkversion`"
 echo "License: GPL"
 echo "Group: System Environment/Kernel"
 echo "Vendor: The Linux Community"
