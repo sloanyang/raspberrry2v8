@@ -39,7 +39,7 @@
 PHONY := _modpost
 _modpost: __modpost
 
-include include/config/auto.conf
+include src/include/config/auto.conf
 include scripts/Kbuild.include
 
 # When building external modules load the Kbuild file to retrieve EXTRA_SYMBOLS info

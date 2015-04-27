@@ -221,7 +221,7 @@ static void use_config(const char *m, int slen)
 
 	define_config(m, slen, hash);
 
-	printf("    $(wildcard include/config/");
+	printf("    $(wildcard src/include/config/");
 	for (i = 0; i < slen; i++) {
 		c = m[i];
 		if (c == '_')
@@ -346,9 +346,9 @@ static void parse_dep_file(void *map, size_t len)
 			s[p - m] = 0;
 
 			/* Ignore certain dependencies */
-			if (strrcmp(s, "include/generated/autoconf.h") &&
-			    strrcmp(s, "arch/um/include/uml-config.h") &&
-			    strrcmp(s, "include/linux/kconfig.h") &&
+			if (strrcmp(s, "src/include/generated/autoconf.h") &&
+			    strrcmp(s, "src/arch/um/include/uml-config.h") &&
+			    strrcmp(s, "src/include/linux/kconfig.h") &&
 			    strrcmp(s, ".ver")) {
 				/*
 				 * Do not list the source file as dependency,

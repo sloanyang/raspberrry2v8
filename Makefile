@@ -358,7 +358,7 @@ USERINCLUDE    := \
 		-I$(srctree)/arch/$(hdr-arch)/include/uapi \
 		-Iarch/$(hdr-arch)/include/generated/uapi \
 		-I$(srctree)/include/uapi \
-		-Iinclude/generated/uapi \
+		-I$(srctree)/include/generated/uapi \
                 -include $(srctree)/include/linux/kconfig.h
 
 # Use LINUXINCLUDE when you must reference the include/ directory.
@@ -386,7 +386,7 @@ KBUILD_CFLAGS_MODULE  := -DMODULE
 KBUILD_LDFLAGS_MODULE := -T $(roottree)/scripts/module-common.lds
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
-KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
+KERNELRELEASE = $(shell cat src/include/config/kernel.release 2> /dev/null)
 KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
 
 export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
@@ -442,9 +442,9 @@ endif
 PHONY += asm-generic
 asm-generic:
 	$(Q)$(MAKE) -f $(roottree)/scripts/Makefile.asm-generic \
-	            src=asm obj=arch/$(SRCARCH)/include/generated/asm
+	            src=asm obj=$(srctree)/arch/$(SRCARCH)/include/generated/asm
 	$(Q)$(MAKE) -f $(roottree)/scripts/Makefile.asm-generic \
-	            src=uapi/asm obj=arch/$(SRCARCH)/include/generated/uapi/asm
+	            src=uapi/asm obj=$(srctree)/arch/$(SRCARCH)/include/generated/uapi/asm
 
 # To make sure we do not include .config for any of the *config targets
 # catch them early, and hand them over to scripts/kconfig/Makefile
@@ -454,7 +454,7 @@ asm-generic:
 # Detect when mixed targets is specified, and make a second invocation
 # of make so .config is not included in this case either (for *config).
 
-version_h := include/generated/uapi/linux/version.h
+version_h := $(srctree)/include/generated/uapi/linux/version.h
 
 no-dot-config-targets := clean mrproper distclean \
 			 cscope gtags TAGS tags help %docs check% coccicheck \
@@ -524,7 +524,7 @@ ifeq ($(KBUILD_EXTMOD),)
 # Carefully list dependencies so we do not try to build scripts twice
 # in parallel
 PHONY += scripts
-scripts: scripts_basic include/config/auto.conf include/config/tristate.conf \
+scripts: scripts_basic src/include/config/auto.conf src/include/config/tristate.conf \
 	 asm-generic
 	$(Q)$(MAKE) $(build)=$(@)
 
@@ -538,32 +538,32 @@ endif # KBUILD_EXTMOD
 
 ifeq ($(dot-config),1)
 # Read in config
--include include/config/auto.conf
+-include src/include/config/auto.conf
 
 ifeq ($(KBUILD_EXTMOD),)
 # Read in dependencies to all Kconfig* files, make sure to run
 # oldconfig if changes are detected.
--include include/config/auto.conf.cmd
+-include src/include/config/auto.conf.cmd
 
 # To avoid any implicit rule to kick in, define an empty command
-$(KCONFIG_CONFIG) include/config/auto.conf.cmd: ;
+$(KCONFIG_CONFIG) src/include/config/auto.conf.cmd: ;
 
 # If .config is newer than include/config/auto.conf, someone tinkered
 # with it and forgot to run make oldconfig.
 # if auto.conf.cmd is missing then we are probably in a cleaned tree so
 # we execute the config step to be sure to catch updated Kconfig files
-include/config/%.conf: $(KCONFIG_CONFIG) include/config/auto.conf.cmd
+src/include/config/%.conf: $(KCONFIG_CONFIG) src/include/config/auto.conf.cmd
 	$(Q)$(MAKE) -f $(roottree)/Makefile silentoldconfig
 else
 # external modules needs include/generated/autoconf.h and include/config/auto.conf
 # but do not care if they are up-to-date. Use auto.conf to trigger the test
-PHONY += include/config/auto.conf
+PHONY += src/include/config/auto.conf
 
-include/config/auto.conf:
-	$(Q)test -e include/generated/autoconf.h -a -e $@ || (		\
+src/include/config/auto.conf:
+	$(Q)test -e src/include/generated/autoconf.h -a -e $@ || (		\
 	echo >&2;							\
 	echo >&2 "  ERROR: Kernel configuration is invalid.";		\
-	echo >&2 "         include/generated/autoconf.h or $@ are missing.";\
+	echo >&2 "         src/include/generated/autoconf.h or $@ are missing.";\
 	echo >&2 "         Run 'make oldconfig && make prepare' on kernel src to fix it.";	\
 	echo >&2 ;							\
 	/bin/false)
@@ -572,7 +572,7 @@ endif # KBUILD_EXTMOD
 
 else
 # Dummy target needed, because used as prerequisite
-include/config/auto.conf: ;
+src/include/config/auto.conf: ;
 endif # $(dot-config)
 
 # The all: target is the default when no target is given on the
@@ -915,7 +915,7 @@ define filechk_kernel.release
 endef
 
 # Store (new) KERNELRELEASE string in include/config/kernel.release
-include/config/kernel.release: include/config/auto.conf FORCE
+src/include/config/kernel.release: src/include/config/auto.conf FORCE
 	$(call filechk,kernel.release)
 
 
@@ -931,10 +931,10 @@ PHONY += prepare archprepare prepare0 prepare1 prepare2 prepare3
 # prepare3 is used to check if we are building in a separate output directory,
 # and if so do:
 # 1) Check that make has not been executed in the kernel src $(srctree)
-prepare3: include/config/kernel.release
+prepare3: src/include/config/kernel.release
 ifneq ($(KBUILD_SRC),)
 	@$(kecho) '  Using $(srctree) as source for kernel'
-	$(Q)if [ -f $(srctree)/.config -o -d $(srctree)/include/config ]; then \
+	$(Q)if [ -f $(roottree)/.config -o -d $(srctree)/include/config ]; then \
 		echo >&2 "  $(srctree) is not clean, please run 'make mrproper'"; \
 		echo >&2 "  in the '$(srctree)' directory.";\
 		/bin/false; \
@@ -944,8 +944,8 @@ endif
 # prepare2 creates a makefile if using a separate output directory
 prepare2: prepare3 outputmakefile asm-generic
 
-prepare1: prepare2 $(version_h) include/generated/utsrelease.h \
-                   include/config/auto.conf
+prepare1: prepare2 $(version_h) src/include/generated/utsrelease.h \
+                   src/include/config/auto.conf
 	$(cmd_crmodverdir)
 
 archprepare: archheaders archscripts prepare1 scripts_basic
@@ -980,7 +980,7 @@ endef
 $(version_h): $(srctree)/Makefile FORCE
 	$(call filechk,version.h)
 
-include/generated/utsrelease.h: include/config/kernel.release FORCE
+src/include/generated/utsrelease.h: src/include/config/kernel.release FORCE
 	$(call filechk,utsrelease.h)
 
 PHONY += headerdep
@@ -1077,7 +1077,7 @@ modules: $(vmlinux-dirs) $(if $(KBUILD_BUILTIN),vmlinux) modules.builtin
 modules.builtin: $(vmlinux-dirs:%=%/modules.builtin)
 	$(Q)$(AWK) '!x[$$0]++' $^ > $(objtree)/modules.builtin
 
-%/modules.builtin: include/config/auto.conf
+%/modules.builtin: src/include/config/auto.conf
 	$(Q)$(MAKE) $(modbuiltin)=$*
 
 
@@ -1143,8 +1143,8 @@ endif # CONFIG_MODULES
 CLEAN_DIRS  += $(MODVERDIR)
 
 # Directories & files removed with 'make mrproper'
-MRPROPER_DIRS  += include/config usr/include include/generated          \
-		  arch/*/include/generated .tmp_objdiff
+MRPROPER_DIRS  += src/include/config src/usr/include src/include/generated          \
+		  src/arch/*/include/generated .tmp_objdiff
 MRPROPER_FILES += .config .config.old .version .old_version $(version_h) \
 		  Module.symvers tags TAGS cscope* GPATH GTAGS GRTAGS GSYMS \
 		  signing_key.priv signing_key.x509 x509.genkey		\
@@ -1199,9 +1199,9 @@ package-dir	:= scripts/package
 
 %src-pkg: FORCE
 	$(Q)$(MAKE) $(build)=$(package-dir) $@
-%pkg: include/config/kernel.release FORCE
+%pkg: src/include/config/kernel.release FORCE
 	$(Q)$(MAKE) $(build)=$(package-dir) $@
-rpm: include/config/kernel.release FORCE
+rpm: src/include/config/kernel.release FORCE
 	$(Q)$(MAKE) $(build)=$(package-dir) $@
 
 

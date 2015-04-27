@@ -72,7 +72,7 @@ const char *conf_get_autoconfig_name(void)
 {
 	char *name = getenv("KCONFIG_AUTOCONFIG");
 
-	return name ? name : "include/config/auto.conf";
+	return name ? name : "src/include/config/auto.conf";
 }
 
 static char *conf_expand_value(const char *in)
@@ -844,7 +844,7 @@ static int conf_split_config(void)
 	name = conf_get_autoconfig_name();
 	conf_read_simple(name, S_DEF_AUTO);
 
-	if (chdir("include/config"))
+	if (chdir("src/include/config"))
 		return 1;
 
 	res = 0;
@@ -953,7 +953,7 @@ int conf_write_autoconf(void)
 
 	sym_clear_all_valid();
 
-	file_write_dep("include/config/auto.conf.cmd");
+	file_write_dep("src/include/config/auto.conf.cmd");
 
 	if (conf_split_config())
 		return 1;
@@ -999,12 +999,12 @@ int conf_write_autoconf(void)
 
 	name = getenv("KCONFIG_AUTOHEADER");
 	if (!name)
-		name = "include/generated/autoconf.h";
+		name = "src/include/generated/autoconf.h";
 	if (rename(".tmpconfig.h", name))
 		return 1;
 	name = getenv("KCONFIG_TRISTATE");
 	if (!name)
-		name = "include/config/tristate.conf";
+		name = "src/include/config/tristate.conf";
 	if (rename(".tmpconfig_tristate", name))
 		return 1;
 	name = conf_get_autoconfig_name();
