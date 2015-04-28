@@ -356,7 +356,7 @@ CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 # Use USERINCLUDE when you must reference the UAPI directories only.
 USERINCLUDE    := \
 		-I$(srctree)/arch/$(hdr-arch)/include/uapi \
-		-Iarch/$(hdr-arch)/include/generated/uapi \
+		-I$(srctree)/arch/$(hdr-arch)/include/generated/uapi \
 		-I$(srctree)/include/uapi \
 		-I$(srctree)/include/generated/uapi \
                 -include $(srctree)/include/linux/kconfig.h
@@ -365,9 +365,9 @@ USERINCLUDE    := \
 # Needed to be compatible with the O= option
 LINUXINCLUDE    := \
 		-I$(srctree)/arch/$(hdr-arch)/include \
-		-Iarch/$(hdr-arch)/include/generated \
+		-I$(srctree)/arch/$(hdr-arch)/include/generated \
 		$(if $(KBUILD_SRC), -I$(srctree)/include) \
-		-Iinclude \
+		-I$(srctree)/include \
 		$(USERINCLUDE)
 
 KBUILD_CPPFLAGS := -D__KERNEL__
@@ -493,7 +493,7 @@ $(filter-out __build_one_by_one, $(MAKECMDGOALS)): __build_one_by_one
 __build_one_by_one:
 	$(Q)set -e; \
 	for i in $(MAKECMDGOALS); do \
-		$(MAKE) -f $(srctree)/Makefile $$i; \
+		$(MAKE) -f $(roottree)/Makefile $$i; \
 	done
 
 else
@@ -886,7 +886,7 @@ quiet_cmd_link-vmlinux = LINK    $@
 # execute if the rest of the kernel build went well.
 vmlinux: scripts/link-vmlinux.sh $(vmlinux-deps) FORCE
 ifdef CONFIG_HEADERS_CHECK
-	$(Q)$(MAKE) -f $(srctree)/Makefile headers_check
+	$(Q)$(MAKE) -f $(roottree)/Makefile headers_check
 endif
 ifdef CONFIG_SAMPLES
 	$(Q)$(MAKE) $(build)=samples
@@ -977,7 +977,7 @@ define filechk_version.h
 	echo '#define KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))';)
 endef
 
-$(version_h): $(srctree)/Makefile FORCE
+$(version_h): $(roottree)/Makefile FORCE
 	$(call filechk,version.h)
 
 src/include/generated/utsrelease.h: src/include/config/kernel.release FORCE
